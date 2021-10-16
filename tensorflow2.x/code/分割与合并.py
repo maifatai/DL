@@ -1,0 +1,24 @@
+import tensorflow as tf
+'''
+拼接
+tf.concat:不会增加一个新的维度,在某个维度可以不相等
+tf.stack:增加一个新的维度，要求合并的维度都相等
+'''
+a=tf.ones([4,35,8])
+b=tf.ones([2,35,8])
+b1=tf.ones([2,35,8])
+b3=tf.ones([4,35,8])
+c=tf.concat([a,b1,b],axis=0)#在第0轴上合并
+c1=tf.stack([a,b3],axis=0)
+c2=tf.stack([a,b3],axis=3)
+print(c1.shape,'\n',c2.shape)
+'''
+分割
+tf.unstack:在某一个轴上分割为一个一个的
+tf.split：可以指定在某个轴上分割的数量
+'''
+c3=tf.unstack(c1,axis=0)
+c4=tf.unstack(c1,axis=3)#在第3轴上分成一个一个的tensor
+print(c3[0].shape,c4[0].shape)
+c5=tf.split(c1,axis=3,num_or_size_splits=[2,2,4])
+print(c5[0].shape,c5[1].shape,c5[2].shape)
