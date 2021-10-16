@@ -1,9 +1,12 @@
 import torch
 from torch.nn import functional as F
+import torch.nn as nn
 #类方法
 inputs=torch.rand(10,3,28,28)
-conv1=torch.nn.Conv2d(in_channels=3,out_channels=16,kernel_size=3,stride=1,padding=0)#无填充
-conv2=torch.nn.Conv2d(in_channels=3,out_channels=16,kernel_size=3,stride=1,padding=1)#填充
+conv1=torch.nn.Conv2d(in_channels=3,out_channels=16,
+    kernel_size=3,stride=1,padding=0)#无填充
+conv2=torch.nn.Conv2d(in_channels=3,out_channels=16,
+    kernel_size=3,stride=1,padding=1)#填充
 
 max_pooling=torch.nn.MaxPool2d(kernel_size=2,stride=2)
 avg_pooling=torch.nn.AvgPool2d(kernel_size=2,stride=2)
@@ -22,9 +25,29 @@ out2_shape=out2.shape
 
 #函数方法
 
-out3=F.conv2d(input=inputs,weight=torch.rand(16,3,3,3),bias=torch.rand(16),stride=1,padding=1)
+out3=F.conv2d(input=inputs,
+    weight=torch.rand(16,3,3,3),bias=torch.rand(16),
+    stride=1,padding=1)
 out31=F.avg_pool2d(out3,2,stride=2)
 out32=F.max_pool2d(out3,2,stride=2)
 
 #上采样
-upsampling=F.interpolate(out32,scale_factor=2,mode='nearest')
+upsampling=F.interpolate(out32,
+        scale_factor=2,mode='nearest')
+
+#卷积参数dilation
+def dilation1():
+    m = nn.Conv2d(1, 1, (3, 3), dilation=(1, 1))  # `dilation=(1,1)` = `dilation=1`
+    input = torch.randn(1, 1, 7, 7)
+    output = m(input)
+    print(output.shape)
+    #>> > 输出: [1, 1, 5, 5]
+def dilation2():
+    m = nn.Conv2d(1, 1, (3, 3), dilation=(2, 2))  # `dilation=(1,1)` = `dilation=1`
+    input = torch.randn(1, 1, 7, 7)
+    output = m(input)
+    print(output.shape)
+    #>> > 输出: [1, 1, 3, 3]
+if __name__=='__main__':
+    dilation1()
+    dilation2()
